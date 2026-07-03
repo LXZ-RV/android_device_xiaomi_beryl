@@ -20,8 +20,7 @@ jobs:
         run: |
           mkdir work
           cd work
-          git clone https://gitlab.com/OrangeFox/manifest.git -b fox_14.1 manifest
-          repo init -u https://gitlab.com/OrangeFox/manifest.git -b fox_14.1
+          repo init --depth=1 -u https://github.com/OrangeFoxRecovery/manifest.git -b fox_14.1
           repo sync -j$(nproc)
 
       - name: Clone device tree
