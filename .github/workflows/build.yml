@@ -1,0 +1,43 @@
+name: Build Recovery
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git curl zip unzip python3
+
+      - name: Set up build environment
+        run: |
+          mkdir work
+          cd work
+          git clone https://gitlab.com/OrangeFox/manifest.git -b fox_14.1 manifest
+          repo init -u https://gitlab.com/OrangeFox/manifest.git -b fox_14.1
+          repo sync -j$(nproc)
+
+      - name: Clone device tree
+        run: |
+          cd work
+          git clone https://github.com/${{ github.repository }} device/xiaomi/beryl
+
+      - name: Build
+        run: |
+          cd work
+          source build/envsetup.sh
+          lunch twrp_beryl-eng
+          mka vendorbootimage
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vendor_boot
+          path: work/out/target/product/beryl/vendor_boot.img
