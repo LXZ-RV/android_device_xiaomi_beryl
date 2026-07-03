@@ -1,0 +1,54 @@
+name: Build OrangeFox (A16)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Device Tree
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git-core curl bc bison build-essential \
+          zip unzip python3 git-lfs \
+          libncurses5-dev libncurses-dev \
+          gcc-multilib g++-multilib libc6-dev-i386 \
+          lib32z1-dev libxml2-utils xsltproc
+
+      - name: Install Repo Tool
+        run: |
+          mkdir -p ~/bin
+          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+          chmod a+x ~/bin/repo
+          echo "$HOME/bin" >> $GITHUB_PATH
+
+      - name: Sync OrangeFox
+        run: |
+          mkdir fox
+          cd fox
+          git clone https://gitlab.com/OrangeFox/sync.git
+          cd sync
+          ./orangefox_sync.sh --branch 14.1 --path $GITHUB_WORKSPACE/fox/fox_14.1
+
+      - name: Move Device Tree
+        run: |
+          mkdir -p fox/fox_14.1/device/xiaomi
+          cp -r $GITHUB_WORKSPACE fox/fox_14.1/device/xiaomi/beryl
+
+      - name: Build
+        run: |
+          cd fox/fox_14.1
+          source build/envsetup.sh
+          lunch twrp_beryl-eng
+          mka vendorbootimage
+
+      - name: Upload Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: OrangeFox-A16
+          path: fox/fox_14.1/out/target/product/beryl/vendor_boot.img
