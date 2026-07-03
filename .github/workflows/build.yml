@@ -27,9 +27,12 @@ jobs:
         run: |
           mkdir work
           cd work
-          repo init --depth=1 -u https://github.com/OrangeFoxRecovery/manifest.git -b fox_14.1
+          repo init --depth=1 \
+            --repo-url=https://android.googlesource.com/tools/repo \
+            -u https://gitlab.com/OrangeFox/Manifest.git \
+            -b fox_14.1
           repo sync -j$(nproc)
-
+          
       - name: Clone device tree
         run: |
           cd work
