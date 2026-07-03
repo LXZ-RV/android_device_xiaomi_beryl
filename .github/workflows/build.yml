@@ -16,6 +16,13 @@ jobs:
           sudo apt update
           sudo apt install -y git curl zip unzip python3
 
+      - name: Install repo tool
+        run: |
+          mkdir -p ~/bin
+          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+          chmod a+x ~/bin/repo
+          echo "$HOME/bin" >> $GITHUB_PATH
+
       - name: Set up build environment
         run: |
           mkdir work
