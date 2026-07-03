@@ -21,10 +21,10 @@ jobs:
 
       - name: Sync OrangeFox Source
         run: |
-          git clone https://gitlab.com/OrangeFox/misc/scripts.git
-          cd scripts
-          chmod +x orangefox_sync.sh
-          ./orangefox_sync.sh --branch fox_14.1 --path $GITHUB_WORKSPACE/fox
+          mkdir fox
+          cd fox
+          repo init --depth=1 -u https://github.com/OrangeFoxRecovery/manifest.git -b fox_14.1
+          repo sync -j$(nproc)
           
       - name: Move Device Tree
         run: |
