@@ -20,6 +20,28 @@ jobs:
           gcc-multilib g++-multilib libc6-dev-i386 \
           lib32z1-dev libxml2-utils xsltproc
 
+      - name: Aggressive Disk Cleanup
+        run: |
+          echo "Before cleanup:"
+          df -h
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/hostedtoolcache
+          sudo rm -rf /usr/lib/jvm
+          sudo apt clean
+          sudo apt autoremove -y
+          echo "After cleanup:"
+          df -h
+
+      - name: Add Swap
+        run: |
+          sudo fallocate -l 16G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          free -h
+
       - name: Install Repo Tool
         run: |
           mkdir -p ~/bin
