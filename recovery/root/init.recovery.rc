@@ -1,0 +1,7 @@
+on init
+    setprop ro.secure 0
+    setprop ro.debuggable 1
+
+service adbd /system/bin/adbd
+    class core
+    seclabel u:r:adbd:s0
