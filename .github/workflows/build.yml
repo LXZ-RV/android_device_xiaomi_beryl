@@ -23,8 +23,9 @@ jobs:
         run: |
           git clone https://gitlab.com/OrangeFox/misc/scripts.git
           cd scripts
-          bash orangefox_sync.sh --branch fox_14.1 --path $GITHUB_WORKSPACE/fox
-
+          chmod +x orangefox_sync.sh
+          ./orangefox_sync.sh --branch fox_14.1 --path $GITHUB_WORKSPACE/fox
+          
       - name: Move Device Tree
         run: |
           mkdir -p fox/device/xiaomi
