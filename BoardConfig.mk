@@ -1,0 +1,22 @@
+DEVICE_PATH := device/xiaomi/beryl
+
+TARGET_ARCH := arm64
+TARGET_ARCH_VARIANT := armv8-a
+TARGET_CPU_ABI := arm64-v8a
+
+# Boot image config (Android 16)
+BOARD_BOOT_HEADER_VERSION := 4
+BOARD_KERNEL_PAGESIZE := 4096
+
+# Prebuilt kernel & dtb
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
+BOARD_PREBUILT_DTBIMAGE := $(DEVICE_PATH)/prebuilt/dtb
+
+# Vendor_boot based recovery (Android 13+)
+BOARD_USES_GENERIC_KERNEL_IMAGE := true
+BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
+BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
+
+# Metadata & AVB
+BOARD_USES_METADATA_PARTITION := true
+BOARD_AVB_ENABLE := true
